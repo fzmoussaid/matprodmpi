@@ -13,7 +13,9 @@ endif
 SRC=    cmdline.c \
 	main.c \
 	perf/perf.c \
-	error.c
+	error.c \
+	input.c \
+	util.c
 
 OBJ=$(SRC:.c=.o)
 DEP=$(SRC:.c=.d)
