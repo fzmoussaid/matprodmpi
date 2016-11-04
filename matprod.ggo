@@ -1,0 +1,5 @@
+version "0.1"
+package "matprod"
+
+purpose "perform a matrix multiplication with MPI using Fox algorithm"
+

@@ -12,7 +12,8 @@ endif
 
 SRC=    cmdline.c \
 	main.c \
-	perf/perf.c
+	perf/perf.c \
+	error.c
 
 OBJ=$(SRC:.c=.o)
 DEP=$(SRC:.c=.d)
@@ -22,7 +23,7 @@ all: $(TARGET)
 -include $(DEP)
 
 
-star: $(OBJ)
+matprod: $(OBJ)
 	$(CC) $^ -o $@ $(LDFLAGS)
 
 %.o: %.c
@@ -36,5 +37,5 @@ mrproper: clean
 	$(RM) $(TARGET)
 
 genopt: matprod.ggo
-	$(GENGETOPT) -u"INPUT FILES" < star.ggo
+	$(GENGETOPT) -u"INPUT FILES" < $^
 
