@@ -21,12 +21,12 @@ extern "C" {
 
 #ifndef CMDLINE_PARSER_PACKAGE
 /** @brief the program name (used for printing errors) */
-#define CMDLINE_PARSER_PACKAGE "matgen"
+#define CMDLINE_PARSER_PACKAGE "genmat"
 #endif
 
 #ifndef CMDLINE_PARSER_PACKAGE_NAME
 /** @brief the complete program name (used for help and version) */
-#define CMDLINE_PARSER_PACKAGE_NAME "matgen"
+#define CMDLINE_PARSER_PACKAGE_NAME "genmat"
 #endif
 
 #ifndef CMDLINE_PARSER_VERSION
@@ -48,7 +48,7 @@ struct gengetopt_args_info
   double max_value_arg;	/**< @brief maximum value for x (default='100.0').  */
   char * max_value_orig;	/**< @brief maximum value for x original value given at command line.  */
   const char *max_value_help; /**< @brief maximum value for x help description.  */
-  
+
   unsigned int help_given ;	/**< @brief Whether help was given.  */
   unsigned int version_given ;	/**< @brief Whether version was given.  */
   unsigned int size_given ;	/**< @brief Whether size was given.  */
@@ -142,7 +142,7 @@ void cmdline_parser_print_help(void);
 void cmdline_parser_print_version(void);
 
 /**
- * Initializes all the fields a cmdline_parser_params structure 
+ * Initializes all the fields a cmdline_parser_params structure
  * to their default values
  * @param params the structure to initialize
  */

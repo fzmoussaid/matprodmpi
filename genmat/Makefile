@@ -1,4 +1,4 @@
-TARGET=matgen
+TARGET=genmat
 CFLAGS=-std=gnu99 -g -Wall -Wextra
 LDFLAGS=-lm
 GENGETOPT=gengetopt
@@ -22,7 +22,7 @@ all: $(TARGET)
 -include $(DEP)
 
 
-matgen: $(OBJ)
+genmat: $(OBJ)
 	$(CC) $^ -o $@ $(LDFLAGS)
 
 %.o: %.c
@@ -35,6 +35,6 @@ clean:
 mrproper: clean
 	$(RM) $(TARGET)
 
-genopt: matgen.ggo
+genopt: genmat.ggo
 	$(GENGETOPT) < $^
 
