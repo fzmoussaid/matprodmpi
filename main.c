@@ -38,11 +38,14 @@ print_time(int rank)
 }
 
 static void
-fox_algorithm(struct matprod_proc *p, int n, double *A, double *B, double *C)
+fox_algorithm(struct matprod_proc *p, struct matprod_equation *root_eq)
 {
-    matprod_mpi_scatter_input(p->N, n, A, B);
-    matprod_perform_fox_mult(p->N, n, A, B, C);
-    matprod_mpi_gather_result(p->N, n, C);
+    struct matprod_equation eq;
+    memset(&eq, 0, sizeof eq);
+
+    matprod_mpi_scatter_input(p, root_eq, &eq);
+    matprod_perform_fox_mult(p, &eq);
+    matprod_mpi_gather_result(p, root_eq, &eq);
 }
 
 int main(int argc, char *argv[])
@@ -60,19 +63,23 @@ int main(int argc, char *argv[])
     MPI_Init(NULL, NULL);
     matprod_mpi_init(&p);
 
-    int n = 0;
-    double *A = NULL, *B = NULL, *C = NULL;
+    struct matprod_equation eq;
+    memset(&eq, 0, sizeof eq);
+
     if (!p.rank) {
         int m;
-        A = matprod_read_input_matrix(p.N, &n, opt.inputs[0]);
-        B = matprod_read_input_matrix(p.N, &m, opt.inputs[1]);
-        assert( ((void)"matrix input must have same size", n == m) );
-        C = tdp_matrix_new(n, n);
+        eq.A = matprod_read_input_matrix(p.N, &eq.n, opt.inputs[0]);
+        eq.B = matprod_read_input_matrix(p.N, &m, opt.inputs[1]);
+        assert( ((void)"matrix input must have same size", eq.n == m) );
+        eq.C = tdp_matrix_new(m, m);
     }
 
     time_start();
-    fox_algorithm(&p, n, A, B, C);
+    fox_algorithm(&p, &eq);
     time_end();
+
+    // print result
+    matprod_equation_free(&eq);
 
     print_time(p.rank);
     MPI_Finalize();
