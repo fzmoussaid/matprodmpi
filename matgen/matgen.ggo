@@ -1,0 +1,13 @@
+version "0.1"
+package "matgen"
+
+purpose "generate a random matrix of given size"
+
+option "size" s "matrix size"
+       int optional default="16"
+
+option "min-value" m "minimum value for x"
+       double optional default="-100.0"
+
+option "max-value" M "maximum value for x"
+       double optional default="100.0"

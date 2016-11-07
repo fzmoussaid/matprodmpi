@@ -78,7 +78,7 @@ int main(int argc, char *argv[])
     fox_algorithm(&p, &eq);
     time_end();
 
-    // print result
+    tdp_matrix_print(eq.n, eq.n, eq.C, eq.n, stdout);
     matprod_equation_free(&eq);
 
     print_time(p.rank);
