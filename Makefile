@@ -1,6 +1,6 @@
 TARGET=matprod
-CFLAGS=-std=gnu99 -g -Wall -Wextra #$(shell pkg-config --cflags glib-2.0)
-LDFLAGS=-lm #$(shell pkg-config --libs glib-2.0) 
+CFLAGS=-std=gnu99 -g -Wall -Wextra $(shell pkg-config --cflags glib-2.0)
+LDFLAGS=-lm $(shell pkg-config --libs glib-2.0) 
 GENGETOPT=gengetopt
 CC=mpicc
 
@@ -15,7 +15,9 @@ SRC=    cmdline.c \
 	perf/perf.c \
 	error.c \
 	input.c \
-	util.c
+	util.c \
+	matprod-mpi.c \
+	fox_mult.c
 
 OBJ=$(SRC:.c=.o)
 DEP=$(SRC:.c=.d)
@@ -39,5 +41,5 @@ mrproper: clean
 	$(RM) $(TARGET)
 
 genopt: matprod.ggo
-	$(GENGETOPT) -u"INPUT FILES" < $^
+	$(GENGETOPT) -u"MatrixA MatrixB" < $^
 

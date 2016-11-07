@@ -152,7 +152,7 @@ double *tdp_cache_garbage(void)
 {
     uint64_t S = tdp_get_cache_size(3)*10;
     double *a = memalign(64, S);
-    
+
     uint64_t s = S * (((uint64_t)log(S))+1);
     while (s > 0) {
         int i = rand() % (S/sizeof *a);
