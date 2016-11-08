@@ -58,9 +58,9 @@ double *matprod_read_input_matrix(
     if (c != 1)
         die_file_bad_format(filename, 0);
 
-    if (n % N != 0) {
+    if (n == 0 || n % N != 0) {
         fprintf(stderr, "erreur: La taille de la matrice n'est pas "
-                "divisible par le nombre de processus");
+                "un multiple strictement positif du nombre de processus");
         exit(EXIT_FAILURE);
     }
     double *mat = tdp_matrix_new(n, n);
