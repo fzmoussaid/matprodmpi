@@ -34,7 +34,8 @@ print_time(int rank)
     MPI_Reduce(&micro, &max_t, 1,
                MPI_UNSIGNED_LONG, MPI_MAX, 0, MPI_COMM_WORLD);
     if (!rank)
-        fprintf(stderr, "time: %lu.%06lu s\n", max_t/1000000UL, max_t%1000000UL);
+        fprintf(stderr, "time: %lu.%06lu s\n",
+                max_t/1000000UL, max_t%1000000UL);
 }
 
 static void

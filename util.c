@@ -7,7 +7,6 @@
 #include <malloc.h>
 
 #include "util.h"
-#include "cblas.h"
 
 /**
  * Pretty print the matrix 'mat'

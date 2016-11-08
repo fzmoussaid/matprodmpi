@@ -1,8 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
-#include <cblas.h>
 
-
+#include "cblas.h"
 #include "fox_mult.h"
 #include "util.h"
 

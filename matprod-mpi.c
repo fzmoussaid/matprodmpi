@@ -81,7 +81,7 @@ void matprod_mpi_scatter_input(struct matprod_proc const *p,
                 int rank;
                 MPI_Cart_rank(p->cart_comm, coord, &rank);
                 sendcnts[rank] = 1;
-                disps[rank] = j*N+i;
+                disps[rank] = (j*N*b+i)*b;
             }
         }
     }
@@ -112,7 +112,7 @@ void matprod_mpi_gather_result(struct matprod_proc const *p,
                 int rank;
                 MPI_Cart_rank(p->cart_comm, coord, &rank);
                 recvcnts[rank] = 1;
-                disps[rank] = i*N+j;
+                disps[rank] = (j*N*b+i)*b*sizeof(double);
             }
         }
     }

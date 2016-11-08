@@ -1,6 +1,6 @@
 TARGET=matprod
 CFLAGS=-std=gnu99 -g -Wall -Wextra $(shell pkg-config --cflags glib-2.0)
-LDFLAGS=-lm -lopenblas $(shell pkg-config --libs glib-2.0) 
+LDFLAGS=-lm -l$(BLASLIB) $(shell pkg-config --libs glib-2.0) 
 GENGETOPT=gengetopt
 CC=mpicc
 
@@ -25,7 +25,6 @@ DEP=$(SRC:.c=.d)
 all: $(TARGET)
 
 -include $(DEP)
-
 
 matprod: $(OBJ)
 	$(CC) $^ -o $@ $(LDFLAGS)
