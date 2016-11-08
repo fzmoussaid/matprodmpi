@@ -31,7 +31,7 @@ void tdp_matrix_print(int m/*rows*/, int n/*columns*/,
 double *tdp_matrix_new(int m/*rows*/, int n/*columns*/)
 {
     double *d;
-    d = memalign(32, m*n*sizeof*d);
+    d = malloc(m*n*sizeof*d);
     memset(d, 0, m*n*sizeof*d);
     assert( ((long)d & 31)  == 0 );
     return d;
@@ -106,7 +106,7 @@ void tdp_matrix_3one(int m/*rows*/, int n/*columns*/,
 double *tdp_vector_new(int m)
 {
     double *d;
-    d = memalign(32, m*sizeof*d);
+    d = malloc(m*sizeof*d);
     assert( ((long)d & 31)  == 0 );
 
     memset(d, 0, m*sizeof*d);
@@ -151,7 +151,7 @@ void tdp_vector_print(int m, double *v, FILE *out)
 double *tdp_cache_garbage(void)
 {
     uint64_t S = tdp_get_cache_size(3)*10;
-    double *a = memalign(64, S);
+    double *a = malloc(S);
 
     uint64_t s = S * (((uint64_t)log(S))+1);
     while (s > 0) {
