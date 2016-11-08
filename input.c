@@ -41,7 +41,7 @@ matprod_readline(FILE *f)
         free(line);
         return NULL;
     }
-    return line;
+    return g_strstrip(line);
 }
 
 double *matprod_read_input_matrix(
@@ -56,20 +56,19 @@ double *matprod_read_input_matrix(
     int n = 0;
     int c = scan_line(f, "%d", &n);
     if (c != 1)
-        die_file_bad_format(filename, 1);
+        die_file_bad_format(filename, 0);
 
     if (n % N != 0) {
         fprintf(stderr, "erreur: La taille de la matrice n'est pas "
                 "divisible par le nombre de processus");
         exit(EXIT_FAILURE);
     }
-
     double *mat = tdp_matrix_new(n, n);
     for (int i = 0; i < n; ++i) {
         char *line = matprod_readline(f);
         if (line == NULL)
             die_file_bad_format(filename, i+1);
-        char **split = g_strsplit(filename, " ", -1);
+        char **split = g_strsplit(line, " ", -1);
         int j = 0;
         for (int k = 0; split[k] != NULL; ++k) {
             if (!g_strcmp0(split[k], ""))

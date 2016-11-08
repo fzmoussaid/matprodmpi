@@ -19,12 +19,14 @@ void matprod_perform_fox_mult(struct matprod_proc *p,
     for (int k = 0; k < N; ++k) {
         Aptr = (j == (i+k)%N) ? eq->A : tmp;
         MPI_Bcast(Aptr, b, column_type, (i+k)%N, p->line_comm);
+
         cblas_dgemm(CblasColMajor, CblasNoTrans, CblasNoTrans,
                     b, b, b, 1.0, Aptr, b, eq->B, b, 1.0*(k!=0),
                     eq->C, b);
+        if (k == N-1) break;
         MPI_Status status;
         MPI_Sendrecv_replace(eq->B, b, column_type,
-                             p->next_col, 0, p->prev_col, 0,
+                             p->prev_col, 0, p->next_col, 0,
                              p->col_comm, &status);
     }
     free(tmp);

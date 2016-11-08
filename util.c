@@ -30,9 +30,7 @@ void tdp_matrix_print(int m/*rows*/, int n/*columns*/,
 double *tdp_matrix_new(int m/*rows*/, int n/*columns*/)
 {
     double *d;
-    d = malloc(m*n*sizeof*d);
-    memset(d, 0, m*n*sizeof*d);
-    assert( ((long)d & 31)  == 0 );
+    d = calloc(m*n, sizeof*d);
     return d;
 }
 
@@ -105,10 +103,7 @@ void tdp_matrix_3one(int m/*rows*/, int n/*columns*/,
 double *tdp_vector_new(int m)
 {
     double *d;
-    d = malloc(m*sizeof*d);
-    assert( ((long)d & 31)  == 0 );
-
-    memset(d, 0, m*sizeof*d);
+    d = calloc(m, sizeof*d);
     return d;
 }
 
