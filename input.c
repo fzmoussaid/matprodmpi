@@ -76,6 +76,7 @@ double *matprod_read_input_matrix(
                 continue;
             mat[j*n+i] = g_ascii_strtod(split[k], NULL);
             ++j;
+            if (j >= n) break;
         }
         g_strfreev(split);
         if (j < n)

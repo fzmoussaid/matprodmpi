@@ -10,6 +10,10 @@ else
 CFLAGS+=-O3
 endif
 
+ifeq ($(strip $(BLASLIB)),)
+BLASLIB=openblas
+endif
+
 SRC=    cmdline.c \
 	main.c \
 	perf/perf.c \
