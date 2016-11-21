@@ -11,18 +11,18 @@
 int main(int argc, char *argv[])
 {
     srand((long) &argc + time(NULL));
-
     struct gengetopt_args_info opt;
 
     cmdline_parser(argc, argv, &opt);
     int n = opt.size_arg;
-
-    double *M = tdp_matrix_new(n, n);
-    tdp_matrix_rand(n, n, M, opt.min_value_arg, opt.max_value_arg);
+    double min = opt.min_value_arg;
+    double max = opt.max_value_arg;
 
     printf("%d\n", n);
-    tdp_matrix_print(n, n, M, n, stdout);
-    free(M);
-
+    for (int j = 0 ; j < n; ++j) {
+        for (int i = 0 ; i < n; ++i)
+            printf("%g ", min + ((double)rand() / RAND_MAX)*(max-min));
+        printf("\n");
+    }
     return EXIT_SUCCESS;
 }
