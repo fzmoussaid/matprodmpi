@@ -9,18 +9,21 @@
 void matprod_mpi_init(struct matprod_proc *p)
 {
     MPI_Comm_size(MPI_COMM_WORLD, &p->group_size);
-    MPI_Comm_rank(MPI_COMM_WORLD, &p->rank);
+
 
     double Nd = sqrt(p->group_size);
     assert( ((void)"processus count must be a perfect integer square",
              floor(Nd) == Nd) );
 
     int N = p->N = (int)Nd;
-    printf("#rank: %d; group_size: %d\n", p->rank, p->group_size);
+
 
     int dims[2] = {N, N};
     int periods[2] = {0, 1};
-    MPI_Cart_create(MPI_COMM_WORLD, 2, dims, periods, 1, &p->cart_comm);
+    MPI_Cart_create(MPI_COMM_WORLD, 2, dims, periods, 0, &p->cart_comm);
+    MPI_Comm_rank(p->cart_comm, &p->rank);
+
+    //printf("#rank: %d; group_size: %d\n", p->rank, p->group_size);
 
     {
         int rem_dims[2] = {1, 0};
@@ -34,7 +37,15 @@ void matprod_mpi_init(struct matprod_proc *p)
         MPI_Comm_rank(p->col_comm, &p->line);
     }
 
-    printf("R=%d L=%d C=%d\n", p->rank, p->line, p->col);
+    int coords[2];
+    MPI_Cart_coords(p->cart_comm, p->rank, 2, coords);
+
+    /* int j = coords[0]; */
+    /* int i = coords[1]; */
+    /* printf("r=%d :: i=%d | p->line=%d :: j=%d | p->col=%d\n", */
+    /*       p->rank, i, p->line, j, p->col); */
+    /* assert( (i == p->line) && (j == p->col)  ); */
+    /* printf("R=%d L=%d C=%d\n", p->rank, p->line, p->col); */
 
     MPI_Cart_shift(p->col_comm, 0, -1, &p->next_col, &p->prev_col);
 }
