@@ -36,9 +36,7 @@ void matprod_mpi_init(struct matprod_proc *p)
 
     printf("R=%d L=%d C=%d\n", p->rank, p->line, p->col);
 
-    int garbage = p->col;
-    MPI_Cart_shift(p->col_comm, 0, 1, &garbage, &p->next_col);
-    MPI_Cart_shift(p->col_comm, 0, -1, &garbage, &p->prev_col);
+    MPI_Cart_shift(p->col_comm, 0, -1, &p->next_col, &p->prev_col);
 }
 
 MPI_Datatype column_type;
