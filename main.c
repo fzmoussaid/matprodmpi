@@ -75,9 +75,9 @@ int main(int argc, char *argv[])
         eq.C = tdp_matrix_new(m, m);
     }
 
-    time_start();
+    time_start();// double *t = MPI_Wtime();
     fox_algorithm(&p, &eq);
-    time_end();
+    time_end(); // t = MPI_Wtime() - t;
 
     if (!p.rank)
         tdp_matrix_print(eq.n, eq.n, eq.C, eq.n, stdout);

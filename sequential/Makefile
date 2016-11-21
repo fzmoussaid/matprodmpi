@@ -1,6 +1,6 @@
 TARGET=matprod_seq
 CFLAGS=-std=gnu99 -g -Wall -Wextra $(shell pkg-config --cflags glib-2.0)
-LDFLAGS=-lm -l$(BLASLIB) $(shell pkg-config --libs glib-2.0) 
+LDFLAGS=-lm $(shell pkg-config --libs glib-2.0) 
 GENGETOPT=gengetopt
 CC=mpicc
 
@@ -11,7 +11,12 @@ CFLAGS+=-O3
 endif
 
 ifeq ($(strip $(BLASLIB)),)
-BLASLIB=openblas
+LDFLAGS+=-lopenblas
+else
+LDFLAGS+= -Wl,--start-group ${MKLROOT}/lib/intel64/libmkl_intel_lp64.a \
+	${MKLROOT}/lib/intel64/libmkl_core.a ${MKLROOT}/lib/intel64/libmkl_gnu_thread.a \
+	-Wl,--end-group ${MKLROOT}/lib/intel64/libmkl_blacs_openmpi_lp64.a \
+	-ldl -lpthread -lm -fopenmp
 endif
 
 SRC=    ../cmdline.c \
