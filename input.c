@@ -86,3 +86,40 @@ double *matprod_read_input_matrix(
     *n_ret = n;
     return mat;
 }
+
+double *matprod_read_input_matrix_seq(int *n_ret, char const *filename)
+{
+    FILE *f = fopen(filename, "r");
+    if (f == NULL) {
+        perror(filename);
+        exit(EXIT_FAILURE);
+    }
+
+    int n = 0;
+    int c = scan_line(f, "%d", &n);
+    if (c != 1)
+        die_file_bad_format(filename, 0);
+
+    double *mat = tdp_matrix_new(n, n);
+    for (int i = 0; i < n; ++i) {
+        char *line = matprod_readline(f);
+        if (line == NULL)
+            die_file_bad_format(filename, i+1);
+        char **split = g_strsplit(line, " ", -1);
+        int j = 0;
+        for (int k = 0; split[k] != NULL; ++k) {
+            if (!g_strcmp0(split[k], ""))
+                continue;
+            mat[j*n+i] = g_ascii_strtod(split[k], NULL);
+            ++j;
+            if (j >= n) break;
+        }
+        g_strfreev(split);
+        if (j < n)
+            die_file_bad_format(filename, i+1);
+        free(line);
+    }
+    fclose(f);
+    *n_ret = n;
+    return mat;
+}
