@@ -39,9 +39,15 @@ struct gengetopt_args_info
 {
   const char *help_help; /**< @brief Print help and exit help description.  */
   const char *version_help; /**< @brief Print version and exit help description.  */
+  int binary_flag;	/**< @brief input matrix are in a binary format (default=off).  */
+  const char *binary_help; /**< @brief input matrix are in a binary format help description.  */
+  int print_flag;	/**< @brief toggle print matrix result in standard output (default=on).  */
+  const char *print_help; /**< @brief toggle print matrix result in standard output help description.  */
 
   unsigned int help_given ;	/**< @brief Whether help was given.  */
   unsigned int version_given ;	/**< @brief Whether version was given.  */
+  unsigned int binary_given ;	/**< @brief Whether binary was given.  */
+  unsigned int print_given ;	/**< @brief Whether print was given.  */
 
   char **inputs ; /**< @brief unamed options (options without names) */
   unsigned inputs_num ; /**< @brief unamed options number */

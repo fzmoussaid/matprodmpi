@@ -12,30 +12,13 @@
 #include "matprod-mpi.h"
 #include "perf/perf.h"
 
-perf_t p1, p2;
 static inline void
-time_start(void)
+print_time(int rank, double time)
 {
-    perf(&p1);
-}
-
-static inline void
-time_end(void)
-{
-    perf(&p2);
-    perf_diff(&p1, &p2);
-}
-
-static inline void
-print_time(int rank)
-{
-    uint64_t micro, max_t;
-    micro = perf_get_micro(&p2);
-    MPI_Reduce(&micro, &max_t, 1,
-               MPI_UNSIGNED_LONG, MPI_MAX, 0, MPI_COMM_WORLD);
+    double max_time;
+    MPI_Reduce(&time, &max_time, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
     if (!rank)
-        fprintf(stderr, "time: %lu.%06lu s\n",
-                max_t/1000000UL, max_t%1000000UL);
+        fprintf(stderr, "time: %g s\n", max_time);
 }
 
 static void
@@ -67,23 +50,18 @@ int main(int argc, char *argv[])
     struct matprod_equation eq;
     memset(&eq, 0, sizeof eq);
 
-    if (!p.rank) {
-        int m;
-        eq.A = matprod_read_input_matrix(p.N, &eq.n, opt.inputs[0]);
-        eq.B = matprod_read_input_matrix(p.N, &m, opt.inputs[1]);
-        assert( ((void)"matrix input must have same size", eq.n == m) );
-        eq.C = tdp_matrix_new(m, m);
-    }
-
-    time_start();// double *t = MPI_Wtime();
-    fox_algorithm(&p, &eq);
-    time_end(); // t = MPI_Wtime() - t;
-
     if (!p.rank)
+        matprod_read_input_matrices(p.N, &eq, opt.inputs, opt.binary_flag);
+
+    double time = MPI_Wtime();
+    fox_algorithm(&p, &eq);
+    time = MPI_Wtime() - time;
+
+    if (!p.rank && opt.print_flag)
         tdp_matrix_print(eq.n, eq.n, eq.C, eq.n, stdout);
     matprod_equation_free(&eq);
 
-    print_time(p.rank);
+    print_time(p.rank, time);
     MPI_Finalize();
     return EXIT_SUCCESS;
 }

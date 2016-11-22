@@ -3,3 +3,8 @@ package "matprod"
 
 purpose "perform a matrix multiplication with MPI using Fox algorithm"
 
+option "binary" b "input matrix are in a binary format"
+       flag off
+
+option "print" p "toggle print matrix result in standard output"
+       flag on

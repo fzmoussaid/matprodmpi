@@ -29,8 +29,6 @@ static inline void print_time(void)
 {
     uint64_t micro;
     micro = perf_get_micro(&p2);
-    /* fprintf(stderr, "time: %lu.%06lu s\n", */
-    /*         micro/1000000UL, micro%1000000UL); */
     fprintf(stderr, "time: %lu µs\n", micro);
 }
 
@@ -47,21 +45,18 @@ int main(int argc, char *argv[])
     struct matprod_equation eq;
     memset(&eq, 0, sizeof eq);
 
-    int m;
-    eq.A = matprod_read_input_matrix_seq(&eq.n, opt.inputs[0]);
-    eq.B = matprod_read_input_matrix_seq(&m, opt.inputs[1]);
-    assert( ((void)"matrix input must have same size", eq.n == m) );
-    eq.C = tdp_matrix_new(m, m);
-    printf("N=%d\n", eq.n);
+    matprod_read_input_matrices(-1, &eq, opt.inputs, opt.binary_flag);
 
     time_start();
     int N = eq.n;
-
     cblas_dgemm(CblasColMajor, CblasNoTrans, CblasTrans,
                 N, N, N, 1.0, eq.A, N, eq.B, N, 0.0, eq.C, N);
     time_end();
 
-    //tdp_matrix_print(eq.n, eq.n, eq.C, eq.n, stdout);
+    if (opt.print_flag) {
+        printf("N=%d\n", eq.n);
+        tdp_matrix_print(eq.n, eq.n, eq.C, eq.n, stdout);
+    }
     matprod_equation_free(&eq);
     print_time();
     return EXIT_SUCCESS;
