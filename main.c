@@ -13,12 +13,14 @@
 #include "perf/perf.h"
 
 static inline void
-print_time(int rank, double time)
+print_time(int rank, int proc_count, int size, double time)
 {
     double max_time;
     MPI_Reduce(&time, &max_time, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
-    if (!rank)
-        fprintf(stderr, "time: %g s\n", max_time);
+    if (!rank) {
+        printf("#Nproc=%dx%d\n", proc_count, proc_count);
+        printf("%d %g\n", size, max_time);
+    }
 }
 
 static void
@@ -59,9 +61,10 @@ int main(int argc, char *argv[])
 
     if (!p.rank && opt.print_flag)
         tdp_matrix_print(eq.n, eq.n, eq.C, eq.n, stdout);
+    int n = eq.n;
     matprod_equation_free(&eq);
 
-    print_time(p.rank, time);
+    print_time(p.rank, p.N, n, time);
     MPI_Finalize();
     return EXIT_SUCCESS;
 }

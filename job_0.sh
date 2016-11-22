@@ -1,23 +1,31 @@
 #!/usr/bin/env bash
-#SBATCH --job-name=thomas-mijieux
-#SBATCH --output=out.2
-#SBATCH --error=err.2
+#SBATCH --job-name=mijieux0
+#SBATCH --output=out.0
+#SBATCH --error=err.0
 #SBATCH -p mistral
-#SBATCH --time=00:60:00
+#SBATCH --time=02:00:00
 #SBATCH --exclusive
-#SBATCH --nodes=4 --ntasks-per-node=1
+#SBATCH --nodes=4
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task 20
 
-module load intel/mkl/64/11.2/2016.0.0
-module load compiler/gcc/5.1.0
-module load slurm/14.11.11
-module load hardware/hwloc/1.11.0
-module load mpi/openmpi/gcc/1.10.1-tm
+WORKDIR=${WORKDIR:-${HOME}/matprodmpi}
 
-cd /home/prcd2016-mijieux/matprodmpi
+cd ${WORKDIR}
+. ./.module.load
 
 do_job() {
-    mpiexec -n 4 --output-filename output/output \
-        ./matprod input/big_20K.txt input/big_20K.txt -p
+    size=$1
+    file=mat_$size.txt
+    ./genmat/genmat -b -s $size > $file
+    mpiexec -n 4 ./matprod -b -p $file $file
+    rm $file
 }
 
-do_job
+for i in $(seq 100 100 1000); do
+    do_job $i
+done
+
+for i in $(seq 5000 5000 20000); do
+    do_job $i
+done
