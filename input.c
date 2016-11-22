@@ -123,3 +123,22 @@ double *matprod_read_input_matrix_seq(int *n_ret, char const *filename)
     *n_ret = n;
     return mat;
 }
+
+
+double *matprod_read_input_matrix_binary(int *n_ret, char const *filename)
+{
+    FILE *f = fopen(filename, "rb");
+    if (f == NULL) {
+        perror(filename);
+        exit(EXIT_FAILURE);
+    }
+    int n;
+    fread(&n, sizeof n, 1, f);
+    double *mat = tdp_matrix_new(n, n);
+    size_t r;
+    r = fread(mat, sizeof mat[0], n*n, f);
+    if (r < n*n)
+        die_file_bad_format(filename, 0);
+    *n_ret = n;
+    return mat;
+}

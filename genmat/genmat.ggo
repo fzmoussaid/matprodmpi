@@ -11,3 +11,9 @@ option "min-value" m "minimum value for x"
 
 option "max-value" M "maximum value for x"
        double optional default="100.0"
+
+option "binary" b "output matrix in binary format"
+       flag off
+
+option "force" f "force binary output on terminal"
+       flag off
