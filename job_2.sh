@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #SBATCH --job-name=mijieux
-#SBATCH --output=job2.stdout.txt
-#SBATCH --error=job2.stderr.txt
+#SBATCH --output=out.2
+#SBATCH --error=err.2
 #SBATCH -p mistral
 #SBATCH --time=00:60:00
 #SBATCH --exclusive
@@ -13,11 +13,11 @@ module load slurm/14.11.11
 module load hardware/hwloc/1.11.0
 module load mpi/openmpi/gcc/1.10.1-tm
 
+
 cd /home/prcd2016-mijieux/matprodmpi/sequential
 
 do_job() {
-    ./matprod_seq ../input/big_20K.txt ../input/big_20K.txt
+    ./matprod_seq ../input/big_20K.txt ../input/big_20K.txt -p
 }
 
 do_job
-
