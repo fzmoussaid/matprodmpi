@@ -13,3 +13,4 @@ matprod
 out.*
 err.*
 output/
+*.png
