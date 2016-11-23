@@ -16,7 +16,7 @@ cd ${WORKDIR}
 
 do_job() {
     size=$1
-    file=mat_$size.txt
+    file=mat1_$size.txt
     ./genmat/genmat -b -s $size > $file
     mpiexec -n 1 ./matprod -b -p $file $file
     rm $file

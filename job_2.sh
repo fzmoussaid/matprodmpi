@@ -17,7 +17,7 @@ cd ${WORKDIR}/sequential
 
 do_job() {
     size=$1
-    file=mat_$size.txt
+    file=mat2_$size.txt
     ../genmat/genmat -b -s $size > $file
     ./matprod_seq -b -p $file $file
     rm $file
