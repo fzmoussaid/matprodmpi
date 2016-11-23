@@ -43,7 +43,7 @@ matprod: $(OBJ)
 	$(CC) -c $(CFLAGS) $*.c -o $*.o
 
 clean:
-	$(RM) $(TARGET) $(OBJ) $(DEP) *.d *.o
+	$(RM) $(OBJ) $(DEP) *.d *.o
 
 mrproper: clean
 	$(RM) $(TARGET)
