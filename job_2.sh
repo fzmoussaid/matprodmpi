@@ -9,6 +9,9 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task 20
 
+# mkl parallele 20 threads pur (pas de MPI)
+
+
 WORKDIR=${WORKDIR:-${HOME}/matprodmpi}
 
 cd ${WORKDIR}

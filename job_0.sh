@@ -9,6 +9,8 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task 20
 
+# 4 noeud / 1 proc mpi par noeud / mkl parallele 20 threads
+
 WORKDIR=${WORKDIR:-${HOME}/matprodmpi}
 
 cd ${WORKDIR}
@@ -21,7 +23,7 @@ do_job() {
     mpiexec -n 4 ./matprod -b -p $file $file
     rm $file
 }
-mpd&
+mpd &
 
 for i in $(seq 100 100 1000); do
     do_job $i
