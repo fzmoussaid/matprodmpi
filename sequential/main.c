@@ -25,11 +25,11 @@ time_end(void)
     perf_diff(&p1, &p2);
 }
 
-static inline void print_time(void)
+static inline void print_time(int n)
 {
     uint64_t micro;
     micro = perf_get_micro(&p2);
-    fprintf(stderr, "time: %lu µs\n", micro);
+    printf("%d %lu.%06lu\n", n, micro/1000000, micro%1000000);
 }
 
 int main(int argc, char *argv[])
@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
 
     time_start();
     int N = eq.n;
-    cblas_dgemm(CblasColMajor, CblasNoTrans, CblasTrans,
+    cblas_dgemm(CblasColMajor, CblasNoTrans, CblasNoTrans,
                 N, N, N, 1.0, eq.A, N, eq.B, N, 0.0, eq.C, N);
     time_end();
 
@@ -57,7 +57,8 @@ int main(int argc, char *argv[])
         printf("N=%d\n", eq.n);
         tdp_matrix_print(eq.n, eq.n, eq.C, eq.n, stdout);
     }
+    int n = eq.n;
     matprod_equation_free(&eq);
-    print_time();
+    print_time(n);
     return EXIT_SUCCESS;
 }
