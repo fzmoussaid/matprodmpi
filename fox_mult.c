@@ -32,10 +32,3 @@ void matprod_perform_fox_mult(struct matprod_proc *p,
     free(tmp);
 }
 
-void matprod_equation_free(struct matprod_equation *eq)
-{
-    free(eq->A);
-    free(eq->B);
-    free(eq->C);
-    memset(eq, 0, sizeof*eq);
-}

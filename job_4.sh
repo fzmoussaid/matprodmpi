@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
-#SBATCH --job-name=mijieux3
-#SBATCH --output=out.3
-#SBATCH --error=err.3
+#SBATCH --job-name=mijieux4
+#SBATCH --output=out.4
+#SBATCH --error=err.4
 #SBATCH -p mistral
 #SBATCH --time=02:00:00
 #SBATCH --exclusive
 #SBATCH --nodes=1
-#SBATCH --ntasks=16
-#SBATCH --ntasks-per-node=16
+#SBATCH --ntasks=9
+#SBATCH --ntasks-per-node=9
 #SBATCH --cpus-per-task 1
 
-# 1 noeud / mkl séquentiel / 16 proc MPI
+# 1 noeud / mkl séquentiel / 9 proc MPI
 
 WORKDIR=${WORKDIR:-${HOME}/matprodmpi}
 
@@ -19,12 +19,12 @@ cd ${WORKDIR}
 
 do_job() {
     size=$1
-    file=mat3_$size.txt
-    let "size=(size+15) & ~15" # nearest multiple of 16
+    file=mat4_$size.txt
+    let "size=(size+9-(size%9))"
     ./genmat/genmat -b -s $size > $file
     export MKL_NUM_THREADS=1
     export OMP_NUM_THREADS=1
-    mpirun -n 16 ./matprod -b -p $file $file
+    mpirun -n 9 ./matprod -b -p $file $file
     unset MKL_NUM_THREADS
     rm $file
 }

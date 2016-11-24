@@ -2,7 +2,7 @@ TARGET=genmat
 CFLAGS=-std=gnu99 -g -Wall -Wextra
 LDFLAGS=-lm
 GENGETOPT=gengetopt
-CC=gcc
+CC=icc
 
 ifdef DEBUG
 CFLAGS+=-ggdb -O0 -DDEBUG=1

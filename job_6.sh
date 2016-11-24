@@ -1,29 +1,30 @@
 #!/usr/bin/env bash
-#SBATCH --job-name=mijieux0
-#SBATCH --output=out.0
-#SBATCH --error=err.0
+#SBATCH --job-name=mijieux3
+#SBATCH --output=out.6
+#SBATCH --error=err.6
 #SBATCH -p mistral
 #SBATCH --time=02:00:00
 #SBATCH --exclusive
-#SBATCH --nodes=4
-#SBATCH --ntasks=4
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task 10
+#SBATCH --cpus-per-task 1
 
-# 4 noeud / 1 proc mpi par noeud
+# 1 noeud / mkl séquentiel / 1 proc MPI
 
 WORKDIR=${WORKDIR:-${HOME}/matprodmpi}
 
 cd ${WORKDIR}
 . ./.module.load
 
-mpd & 
-
 do_job() {
     size=$1
-    file=mat0_$size.txt
+    file=mat6_$size.txt
     ./genmat/genmat -b -s $size > $file
-    mpirun -n 4 ./matprod -b -p $file $file
+    export MKL_NUM_THREADS=1
+    export OMP_NUM_THREADS=1
+    mpirun -n 1 ./matprod -b -p $file $file
+    unset MKL_NUM_THREADS
     rm $file
 }
 
@@ -32,8 +33,3 @@ for i in $(seq 100 100 1000); do
 done
 
 do_job 2500
-
-for i in $(seq 5000 5000 20000); do
-    do_job $i
-done
-

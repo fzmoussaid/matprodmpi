@@ -1,8 +1,9 @@
 TARGET=matprod
-CFLAGS=-std=gnu99 -g -Wall -Wextra $(shell pkg-config --cflags glib-2.0)
+CFLAGS=-std=gnu99 -g -Wall -Wextra \
+	 $(shell pkg-config --cflags glib-2.0)
 LDFLAGS=-lm $(shell pkg-config --libs glib-2.0) 
 GENGETOPT=gengetopt
-CC=mpicc
+CC=mpiicc
 
 ifdef DEBUG
 CFLAGS+=-ggdb -O0 -DDEBUG=1
@@ -10,13 +11,12 @@ else
 CFLAGS+=-O3
 endif
 
-ifeq ($(strip $(BLASLIB)),)
+ifeq ($(strip $(MKLROOT)),)
 LDFLAGS+=-lopenblas
 else
-LDFLAGS+= -Wl,--start-group ${MKLROOT}/lib/intel64/libmkl_intel_lp64.a \
-	${MKLROOT}/lib/intel64/libmkl_core.a ${MKLROOT}/lib/intel64/libmkl_gnu_thread.a \
-	-Wl,--end-group ${MKLROOT}/lib/intel64/libmkl_blacs_openmpi_lp64.a \
-	-ldl -lpthread -lm -fopenmp
+LDFLAGS+= -Wl,--start-group ${MKLROOT}/lib/intel64/libmkl_intel_lp64.a ${MKLROOT}/lib/intel64/libmkl_intel_thread.a ${MKLROOT}/lib/intel64/libmkl_core.a ${MKLROOT}/lib/intel64/libmkl_blacs_intelmpi_lp64.a -Wl,--end-group -liomp5 -lpthread -lm -ldl
+CFLAGS+= -I${MKLROOT}/include
+
 endif
 
 SRC=    cmdline.c \
@@ -26,7 +26,8 @@ SRC=    cmdline.c \
 	input.c \
 	util.c \
 	matprod-mpi.c \
-	fox_mult.c
+	fox_mult.c \
+	equation.c
 
 OBJ=$(SRC:.c=.o)
 DEP=$(SRC:.c=.d)

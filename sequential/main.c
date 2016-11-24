@@ -9,7 +9,7 @@
 #include "../util.h"
 #include "../input.h"
 #include "../perf/perf.h"
-#include "../fox_mult.h"
+#include "../equation.h"
 
 perf_t p1, p2;
 static inline void

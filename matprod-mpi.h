@@ -7,7 +7,7 @@ struct matprod_proc;
 extern MPI_Datatype column_type;
 extern MPI_Datatype block_type;
 
-#include "fox_mult.h"
+#include "equation.h"
 
 struct matprod_proc {
     int rank;
